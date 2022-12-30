@@ -3,19 +3,31 @@ const app = express();
 const { execSync } = require('child_process');
 const fs = require('fs');
 const filenameScanResult = 'filenameScanResult.json';
-
-/**
- * strにsearchが含まれればtrueを返す
- */
-const isMatch = (str, search) => -1 !== str.indexOf(search);
-let jpgsDirPathList = null;
-
 app.set('view engine', 'ejs'); // ejsの使用を宣言している
 app.use(express.json()); // body-parser
 app.use(express.urlencoded({ extended: true })); // body-parser
 app.use(express.static('public')); // ディレクトリを再帰的に公開する。画像もこの下にある
 
-/* ルーティング */
+/**
+ * strにsearchが含まれればtrueを返す
+ */
+const isMatch = (str, search) => -1 !== str.indexOf(search);
+
+/**
+ * スキャンして、publicより下のパス文字列の配列を返す
+ * ['cloud_volumes/test1_jpgs', 'cloud_volumes/test2_jpgs', ... ]
+ */
+const scanJpgsDirPathList = ({ execSync }) => {
+  const cmd = "find public/cloud_volumes/ -name '*jpgs' -type d";
+  const result = execSync(cmd).toString().trim().split('\n').sort();
+  return result.map((e) => e.split('public/')[1]);
+};
+
+/**
+ * スキャン結果用のメモリ
+ */
+let jpgsDirPathList = null;
+
 app.get('/', (req, res) => {
   if (!jpgsDirPathList) {
     jpgsDirPathList = JSON.parse(fs.readFileSync(filenameScanResult).toString());
@@ -40,25 +52,10 @@ app.get('/scan', (req, res) => {
 
 app.get('/view/:title', (req, res) => {
   const title = req.params.title;
-
-  res.send({ title });
+  const jpgsDirPath = jpgsDirPathList.filter((e) => isMatch(e, title))[0];
+  res.send({ jpgsDirPath });
   // TODO
-});
-
-// 日本語もパスパラメタが取れる！
-app.get('/animal/:name', (req, res) => {
-  res.send(`<h1>${req.params.name}のページです。</h1>`);
 });
 
 /* 起動 */
 app.listen(3000);
-
-/**
- * スキャンして、publicより下のパス文字列の配列を返す
- * ['cloud_volumes/test1_jpgs', 'cloud_volumes/test2_jpgs', ... ]
- */
-const scanJpgsDirPathList = ({ execSync }) => {
-  const cmd = "find public/cloud_volumes/ -name '*jpgs' -type d";
-  const result = execSync(cmd).toString().trim().split('\n').sort();
-  return result.map((e) => e.split('public/')[1]);
-};
