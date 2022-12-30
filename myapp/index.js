@@ -26,6 +26,11 @@ app.get('/test', (req, res) => {
   res.send('<pre>' + out + '</pre>');
 });
 
+// 日本語もパスパラメタが取れる！
+app.get('/animal/:name', (req, res) => {
+  res.send(`<h1>${req.params.name}のページです。</h1>`);
+});
+
 /* 起動 */
 app.listen(3000);
 
