@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
     div += '</a><br /><span>1/228</span></div>';
     return div;
   });
-  res.render('menu', { divs });
+  res.render('index', { divs });
 });
 
 app.get('/scan', (req, res) => {
