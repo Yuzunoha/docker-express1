@@ -23,15 +23,8 @@ const scanJpgsDirPathList = ({ execSync }) => {
   return result.map((e) => e.split('public/')[1]);
 };
 
-/**
- * スキャン結果用のメモリ
- */
-let jpgsDirPathList = null;
-
 app.get('/', (req, res) => {
-  if (!jpgsDirPathList) {
-    jpgsDirPathList = JSON.parse(fs.readFileSync(filenameScanResult).toString());
-  }
+  const jpgsDirPathList = JSON.parse(fs.readFileSync(filenameScanResult).toString());
   const divs = jpgsDirPathList.map((e) => {
     const a = e.split('/');
     let div = '';
@@ -45,15 +38,19 @@ app.get('/', (req, res) => {
 });
 
 app.get('/scan', (req, res) => {
-  jpgsDirPathList = scanJpgsDirPathList({ execSync });
+  const jpgsDirPathList = scanJpgsDirPathList({ execSync });
   fs.writeFileSync(filenameScanResult, JSON.stringify(jpgsDirPathList), 'utf8', (e) => e);
   res.redirect('/');
 });
 
 app.get('/view/:title', (req, res) => {
+  const jpgsDirPathList = JSON.parse(fs.readFileSync(filenameScanResult).toString());
   const title = req.params.title;
   const jpgsDirPath = jpgsDirPathList.filter((e) => isMatch(e, title))[0];
-  res.send({ jpgsDirPath });
+  // 画像パスリスト
+  const cmd = `ls ./public/${jpgsDirPath}/*`;
+  const jpgPathList = execSync(cmd).toString().trim().split('\n').sort();
+  res.send({ jpgPathList });
   // TODO
 });
 
