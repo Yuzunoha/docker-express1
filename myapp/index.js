@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true })); // body-parser
 /* ルーティング */
 app.get('/', (req, res) => {
   let out = '';
+  // out += execSync("find $PWD/cloud_volumes/ -name '*jpgs' -type d").toString() + '<br>';
   out += execSync('pwd').toString() + '<br>';
   out += execSync('cd ../cloud_volumes/test/jpgs && ls').toString() + '<br>';
   res.send('<pre>' + out + '</pre>');
