@@ -29,8 +29,9 @@
           height: auto !important;
         }
       </style>
-      <div style="text-align: center; color: #999; padding-bottom: 10px; font-size: 13px"><img src="cloud_volumes/test1_jpgs/001.JPG" width="99%" /><br /><span>1/228</span></div>
-      <div style="text-align: center; color: #999; padding-bottom: 10px; font-size: 13px"><img src="cloud_volumes/test2_jpgs/003.JPG" width="99%" /><br /><span>2/228</span></div>
+      <% for (const div of divs) { %>
+        <%- div %>
+      <% } %>
     </div>
   </body>
 </html>

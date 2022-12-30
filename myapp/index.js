@@ -14,7 +14,17 @@ app.use(express.static('public')); // ディレクトリを再帰的に公開す
 
 /* ルーティング */
 app.get('/', (req, res) => {
-  res.render('menu', {});
+  const jpgsDirPathList = scanJpgsDirPathList({ execSync });
+  const divs = jpgsDirPathList.map((e) => {
+    const a = e.split('/');
+    let div = '';
+    div += '<div style="text-align: center; color: #999; padding-bottom: 10px; font-size: 13px">';
+    div += `<a href="/${a[a.length - 1]}">`;
+    div += `<img src="${e}/001.JPG" width="99%" />`; // 各jpgsフォルダの先頭画像を代表で選んでいる
+    div += '</a><br /><span>1/228</span></div>';
+    return div;
+  });
+  res.render('menu', { divs });
 });
 
 app.get('/scan', (req, res) => {
