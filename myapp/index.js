@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
   res.render('menu', {});
 });
 
-app.get('/test', (req, res) => {
+app.get('/scan', (req, res) => {
   const a = scanJpgsDirPathList({ execSync });
   let out = '';
   a.forEach((e) => {
@@ -36,7 +36,7 @@ app.listen(3000);
 
 /**
  * スキャンして、publicより下のパス文字列の配列を返す
- * ['cloud_volumes/test1/jpgs', 'cloud_volumes/test2/jpgs', ... ]
+ * ['cloud_volumes/test1_jpgs', 'cloud_volumes/test2_jpgs', ... ]
  */
 const scanJpgsDirPathList = ({ execSync }) => {
   const cmd = "find public/cloud_volumes/ -name '*jpgs' -type d";
