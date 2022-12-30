@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true })); // body-parser
 
 /* ルーティング */
 app.get('/', (req, res) => {
-  res.send('hello!');
+  res.send('こんにちは！');
 });
 
 /* 起動 */

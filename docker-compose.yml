@@ -12,4 +12,6 @@ services:
       - '8080:3000'
     working_dir: /app
     command: >
-      sh -c "pwd && whoami && ls -la && npm install && npm start"
+      sh -c "echo === コマンド開始 === &&
+      pwd && whoami && ls -la && 
+      npm install && npm run nodemon"
