@@ -1,9 +1,8 @@
 version: '3'
 services:
   webserver:
+    image: node:16-alpine
     container_name: manga1
-    build:
-      context: ./node
     # tty: true で止まらないようにする
     tty: true
     volumes:
