@@ -50,6 +50,6 @@ app.listen(3000);
  */
 const scanJpgsDirPathList = ({ execSync }) => {
   const cmd = "find public/cloud_volumes/ -name '*jpgs' -type d";
-  const result = execSync(cmd).toString().trim().split('\n');
+  const result = execSync(cmd).toString().trim().split('\n').sort();
   return result.map((e) => e.split('public/')[1]);
 };
