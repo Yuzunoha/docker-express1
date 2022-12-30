@@ -56,7 +56,6 @@ app.get('/view/:title', (req, res) => {
     .sort()
     .map((e) => e.split('public')[1]);
   const divs = jpgPathList.map((e) => {
-    const a = e.split('/');
     let div = '';
     div += '<div style="text-align: center; color: #999; padding-bottom: 10px; font-size: 13px">';
     div += `<img src="${e}" width="99%" />`;
