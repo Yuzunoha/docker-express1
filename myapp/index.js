@@ -7,12 +7,17 @@ const { execSync } = require('child_process');
 app.set('view engine', 'ejs'); // ejsの使用を宣言している
 app.use(express.json()); // body-parser
 app.use(express.urlencoded({ extended: true })); // body-parser
+app.use(express.static('public')); // 画像ディレクトリを公開する
 
 /* ミドルウェア */
 // app.use('/', controller.checkAndInitDb);
 
 /* ルーティング */
 app.get('/', (req, res) => {
+  res.render('menu', {});
+});
+
+app.get('/test', (req, res) => {
   const a = scanJpgsDirPathList({ execSync });
   let out = '';
   a.forEach((e) => {
