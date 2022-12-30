@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true })); // body-parser
 
 /* ルーティング */
 app.get('/', (req, res) => {
-  const a = execSync("find /cloud_volumes/ -name '*jpgs' -type d").toString().trim().split('\n');
+  const a = scanJpgsDirPathList({ execSync });
   let out = '';
   a.forEach((e) => {
     out += '画像のディレクトリ: ' + e + '<br>';
@@ -23,3 +23,12 @@ app.get('/', (req, res) => {
 
 /* 起動 */
 app.listen(3000);
+
+/**
+ * スキャンしてパス文字列の配列を返す
+ * ['/cloud_volumes/test1/jpgs', '/cloud_volumes/test2/jpgs', ... ]
+ */
+const scanJpgsDirPathList = ({ execSync }) => {
+  const cmd = "find /cloud_volumes/ -name '*jpgs' -type d";
+  return execSync(cmd).toString().trim().split('\n');
+};
