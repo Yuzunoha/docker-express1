@@ -14,9 +14,14 @@ app.use(express.static('public')); // ディレクトリを再帰的に公開す
 /* ミドルウェア */
 // app.use('/', controller.checkAndInitDb);
 
+/* グローバル変数 */
+let jpgsDirPathList = null;
+
 /* ルーティング */
 app.get('/', (req, res) => {
-  const jpgsDirPathList = JSON.parse(fs.readFileSync(filenameScanResult).toString());
+  if (!jpgsDirPathList) {
+    jpgsDirPathList = JSON.parse(fs.readFileSync(filenameScanResult).toString());
+  }
   const divs = jpgsDirPathList.map((e) => {
     const a = e.split('/');
     let div = '';
@@ -30,9 +35,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/scan', (req, res) => {
-  const a = scanJpgsDirPathList({ execSync });
-  fs.writeFileSync(filenameScanResult, JSON.stringify(a), 'utf8', (e) => e);
+  jpgsDirPathList = scanJpgsDirPathList({ execSync });
+  fs.writeFileSync(filenameScanResult, JSON.stringify(jpgsDirPathList), 'utf8', (e) => e);
   res.redirect('/');
+});
+
+app.get('/view/:title', (req, res) => {
+  res.send({ title });
+  // TODO
 });
 
 // 日本語もパスパラメタが取れる！
