@@ -10,8 +10,7 @@ services:
     ports:
       - '8080:3000'
     working_dir: /app
-    # nodemon は timeout が弱点である
     command: >
       sh -c "echo === コマンド開始 === &&
       pwd && whoami && ls -la && 
-      npm install && npm run nodemon"
+      npm install && npm start"
