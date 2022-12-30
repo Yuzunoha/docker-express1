@@ -7,7 +7,6 @@ services:
     tty: true
     volumes:
       - ./myapp:/app
-      - ./cloud_volumes:/cloud_volumes
     ports:
       - '8080:3000'
     working_dir: /app
