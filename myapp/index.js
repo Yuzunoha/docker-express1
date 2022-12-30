@@ -2,6 +2,8 @@
 const express = require('express');
 const app = express();
 const { execSync } = require('child_process');
+const fs = require('fs');
+const filenameScanResult = 'filenameScanResult.json';
 
 /* セッティング */
 app.set('view engine', 'ejs'); // ejsの使用を宣言している
@@ -14,7 +16,7 @@ app.use(express.static('public')); // ディレクトリを再帰的に公開す
 
 /* ルーティング */
 app.get('/', (req, res) => {
-  const jpgsDirPathList = scanJpgsDirPathList({ execSync });
+  const jpgsDirPathList = JSON.parse(fs.readFileSync(filenameScanResult).toString());
   const divs = jpgsDirPathList.map((e) => {
     const a = e.split('/');
     let div = '';
@@ -29,11 +31,8 @@ app.get('/', (req, res) => {
 
 app.get('/scan', (req, res) => {
   const a = scanJpgsDirPathList({ execSync });
-  let out = '';
-  a.forEach((e) => {
-    out += '画像のディレクトリ: ' + e + '<br>';
-  });
-  res.send('<pre>' + out + '</pre>');
+  fs.writeFileSync(filenameScanResult, JSON.stringify(a), 'utf8', (e) => e);
+  res.redirect('/');
 });
 
 // 日本語もパスパラメタが取れる！
