@@ -47,11 +47,23 @@ app.get('/view/:title', (req, res) => {
   const jpgsDirPathList = JSON.parse(fs.readFileSync(filenameScanResult).toString());
   const title = req.params.title;
   const jpgsDirPath = jpgsDirPathList.filter((e) => isMatch(e, title))[0];
-  // 画像パスリスト
   const cmd = `ls ./public/${jpgsDirPath}/*`;
-  const jpgPathList = execSync(cmd).toString().trim().split('\n').sort();
-  res.send({ jpgPathList });
-  // TODO
+  // 画像パスリスト: ["cloud_volumes/test1_jpgs/001.JPG", "cloud_volumes/test1_jpgs/002.JPG", ... ]
+  const jpgPathList = execSync(cmd)
+    .toString()
+    .trim()
+    .split('\n')
+    .sort()
+    .map((e) => e.split('public')[1]);
+  const divs = jpgPathList.map((e) => {
+    const a = e.split('/');
+    let div = '';
+    div += '<div style="text-align: center; color: #999; padding-bottom: 10px; font-size: 13px">';
+    div += `<img src="${e}" width="99%" />`;
+    div += '<br /><span>1/228</span></div>';
+    return div;
+  });
+  res.render('index', { divs });
 });
 
 /* 起動 */
