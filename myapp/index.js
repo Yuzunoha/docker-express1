@@ -13,10 +13,11 @@ app.use(express.urlencoded({ extended: true })); // body-parser
 
 /* ルーティング */
 app.get('/', (req, res) => {
+  const a = execSync("find /cloud_volumes/ -name '*jpgs' -type d").toString().trim().split('\n');
   let out = '';
-  // out += execSync("find $PWD/cloud_volumes/ -name '*jpgs' -type d").toString() + '<br>';
-  out += execSync('pwd').toString() + '<br>';
-  out += execSync('cd ../cloud_volumes/test/jpgs && ls').toString() + '<br>';
+  a.forEach((e) => {
+    out += '画像のディレクトリ: ' + e + '<br>';
+  });
   res.send('<pre>' + out + '</pre>');
 });
 
