@@ -1,6 +1,7 @@
 /* インスタンス化 */
 const express = require('express');
 const app = express();
+const { execSync } = require('child_process');
 
 /* セッティング */
 app.set('view engine', 'ejs'); // ejsの使用を宣言している
@@ -12,7 +13,10 @@ app.use(express.urlencoded({ extended: true })); // body-parser
 
 /* ルーティング */
 app.get('/', (req, res) => {
-  res.send('こんにちは！');
+  let out = '';
+  out += execSync('pwd').toString() + '<br>';
+  out += execSync('cd ../cloud_volumes/test/jpgs && ls').toString() + '<br>';
+  res.send('<pre>' + out + '</pre>');
 });
 
 /* 起動 */
