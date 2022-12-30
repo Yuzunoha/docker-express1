@@ -1,21 +1,19 @@
-/* インスタンス化 */
 const express = require('express');
 const app = express();
 const { execSync } = require('child_process');
 const fs = require('fs');
 const filenameScanResult = 'filenameScanResult.json';
 
-/* セッティング */
+/**
+ * strにsearchが含まれればtrueを返す
+ */
+const isMatch = (str, search) => -1 !== str.indexOf(search);
+let jpgsDirPathList = null;
+
 app.set('view engine', 'ejs'); // ejsの使用を宣言している
 app.use(express.json()); // body-parser
 app.use(express.urlencoded({ extended: true })); // body-parser
 app.use(express.static('public')); // ディレクトリを再帰的に公開する。画像もこの下にある
-
-/* ミドルウェア */
-// app.use('/', controller.checkAndInitDb);
-
-/* グローバル変数 */
-let jpgsDirPathList = null;
 
 /* ルーティング */
 app.get('/', (req, res) => {
@@ -26,7 +24,7 @@ app.get('/', (req, res) => {
     const a = e.split('/');
     let div = '';
     div += '<div style="text-align: center; color: #999; padding-bottom: 10px; font-size: 13px">';
-    div += `<a href="/${a[a.length - 1]}">`;
+    div += `<a href="/view/${a[a.length - 1]}">`;
     div += `<img src="${e}/001.JPG" width="99%" />`; // 各jpgsフォルダの先頭画像を代表で選んでいる
     div += '</a><br /><span>1/228</span></div>';
     return div;
@@ -41,6 +39,8 @@ app.get('/scan', (req, res) => {
 });
 
 app.get('/view/:title', (req, res) => {
+  const title = req.params.title;
+
   res.send({ title });
   // TODO
 });
