@@ -7,7 +7,7 @@ const { execSync } = require('child_process');
 app.set('view engine', 'ejs'); // ejsの使用を宣言している
 app.use(express.json()); // body-parser
 app.use(express.urlencoded({ extended: true })); // body-parser
-app.use(express.static('public')); // 画像ディレクトリを公開する
+app.use(express.static('public')); // ディレクトリを再帰的に公開する。画像もこの下にある
 
 /* ミドルウェア */
 // app.use('/', controller.checkAndInitDb);
@@ -30,10 +30,11 @@ app.get('/test', (req, res) => {
 app.listen(3000);
 
 /**
- * スキャンしてパス文字列の配列を返す
- * ['/cloud_volumes/test1/jpgs', '/cloud_volumes/test2/jpgs', ... ]
+ * スキャンして、publicより下のパス文字列の配列を返す
+ * ['cloud_volumes/test1/jpgs', 'cloud_volumes/test2/jpgs', ... ]
  */
 const scanJpgsDirPathList = ({ execSync }) => {
-  const cmd = "find /cloud_volumes/ -name '*jpgs' -type d";
-  return execSync(cmd).toString().trim().split('\n');
+  const cmd = "find public/cloud_volumes/ -name '*jpgs' -type d";
+  const result = execSync(cmd).toString().trim().split('\n');
+  return result.map((e) => e.split('public/')[1]);
 };
