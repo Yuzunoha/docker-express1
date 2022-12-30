@@ -1,0 +1,12 @@
+version: '3'
+services:
+  webserver:
+    container_name: manga1
+    build:
+      context: ./node
+    # tty: true で止まらないようにする
+    tty: true
+    volumes:
+      - ./node/app:/app
+    ports:
+      - '8080:3000'
