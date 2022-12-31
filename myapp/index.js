@@ -20,7 +20,7 @@ const isMatch = (str, search) => -1 !== str.indexOf(search);
 const scanJpgsDirPathList = ({ execSync }) => {
   const cmd = "find public/cloud_volumes/06_books -name '*jpgs' -type d";
   const result = execSync(cmd).toString().trim().split('\n').sort();
-  return result.map((e) => e.split('public')[1]);
+  return result.map((e) => e.split('public/')[1]);
 };
 
 app.get('/', (req, res) => {
@@ -47,7 +47,7 @@ app.get('/view/:title', (req, res) => {
   const jpgsDirPathList = JSON.parse(fs.readFileSync(filenameScanResult).toString());
   const title = req.params.title;
   const jpgsDirPath = jpgsDirPathList.filter((e) => isMatch(e, title))[0];
-  const cmd = `ls ./public/${jpgsDirPath}/*`;
+  const cmd = `ls ./public/${jpgsDirPath}`;
   // 画像パスリスト: ["cloud_volumes/test1_jpgs/001.jpg", "cloud_volumes/test1_jpgs/002.jpg", ... ]
   const jpgPathList = execSync(cmd)
     .toString()
