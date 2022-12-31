@@ -54,11 +54,12 @@ app.get('/view/:title', (req, res) => {
     .trim()
     .split('\n')
     .sort()
-    .map((e) => e.split('public')[1]);
+    .map((e) => e);
   const divs = jpgPathList.map((e) => {
+    const src = `/${jpgsDirPath}/${e}`;
     let div = '';
     div += '<div style="text-align: center; color: #999; padding-bottom: 10px; font-size: 13px">';
-    div += `<img src="${e}" width="99%" />`;
+    div += `<img src="${src}" width="99%" />`;
     div += '<br /><span>1/228</span></div>';
     return div;
   });
