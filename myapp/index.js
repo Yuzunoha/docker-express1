@@ -17,9 +17,13 @@ const isMatch = (str, search) => -1 !== str.indexOf(search);
  * スキャンして、publicより下のパス文字列の配列を返す
  * ['cloud_volumes/test1_jpgs', 'cloud_volumes/test2_jpgs', ... ]
  */
-const scanJpgsDirPathList = ({ execSync }) => {
-  const cmd = "find public/cloud_volumes -name '*jpgs' -type d";
-  const result = execSync(cmd).toString().trim().split('\n').sort();
+const scanJpgsDirPathList = ({ execSync, scanTargetList }) => {
+  let result = [];
+  scanTargetList.forEach((scanTarget) => {
+    const cmd = `find ${scanTarget} -name '*jpgs' -type d`;
+    const a = execSync(cmd).toString().trim().split('\n').sort();
+    result = result.concat(a);
+  });
   return result.map((e) => e.split('public/')[1]);
 };
 
@@ -38,7 +42,12 @@ app.get('/', (req, res) => {
 });
 
 app.get('/scan', (req, res) => {
-  const jpgsDirPathList = scanJpgsDirPathList({ execSync });
+  const scanTargetList = [
+    'public/cloud_volumes/yuzucloud.com/06_books', //
+    'public/cloud_volumes/06_books',
+    'public/cloud_volumes/cloud_volumes_demo',
+  ];
+  const jpgsDirPathList = scanJpgsDirPathList({ execSync, scanTargetList });
   fs.writeFileSync(filenameScanResult, JSON.stringify(jpgsDirPathList), 'utf8', (e) => e);
   res.redirect('/');
 });
