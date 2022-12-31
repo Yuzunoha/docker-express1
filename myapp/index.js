@@ -18,7 +18,7 @@ const isMatch = (str, search) => -1 !== str.indexOf(search);
  * ['cloud_volumes/test1_jpgs', 'cloud_volumes/test2_jpgs', ... ]
  */
 const scanJpgsDirPathList = ({ execSync }) => {
-  const cmd = "find public/cloud_volumes/06_books -name '*jpgs' -type d";
+  const cmd = "find public/cloud_volumes -name '*jpgs' -type d";
   const result = execSync(cmd).toString().trim().split('\n').sort();
   return result.map((e) => e.split('public/')[1]);
 };
