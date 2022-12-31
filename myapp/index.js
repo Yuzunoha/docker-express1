@@ -18,9 +18,9 @@ const isMatch = (str, search) => -1 !== str.indexOf(search);
  * ['cloud_volumes/test1_jpgs', 'cloud_volumes/test2_jpgs', ... ]
  */
 const scanJpgsDirPathList = ({ execSync }) => {
-  const cmd = "find public/cloud_volumes/ -name '*jpgs' -type d";
+  const cmd = "find public/cloud_volumes/06_books -name '*jpgs' -type d";
   const result = execSync(cmd).toString().trim().split('\n').sort();
-  return result.map((e) => e.split('public/')[1]);
+  return result.map((e) => e.split('public')[1]);
 };
 
 app.get('/', (req, res) => {
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
     let div = '';
     div += '<div style="text-align: center; color: #999; padding-bottom: 10px; font-size: 13px">';
     div += `<a href="/view/${a[a.length - 1]}">`;
-    div += `<img src="${e}/001.JPG" width="99%" />`; // 各jpgsフォルダの先頭画像を代表で選んでいる
+    div += `<img src="${e}/001.jpg" width="99%" />`; // 各jpgsフォルダの先頭画像を代表で選んでいる
     div += '</a><br /><span>1/228</span></div>';
     return div;
   });
@@ -48,7 +48,7 @@ app.get('/view/:title', (req, res) => {
   const title = req.params.title;
   const jpgsDirPath = jpgsDirPathList.filter((e) => isMatch(e, title))[0];
   const cmd = `ls ./public/${jpgsDirPath}/*`;
-  // 画像パスリスト: ["cloud_volumes/test1_jpgs/001.JPG", "cloud_volumes/test1_jpgs/002.JPG", ... ]
+  // 画像パスリスト: ["cloud_volumes/test1_jpgs/001.jpg", "cloud_volumes/test1_jpgs/002.jpg", ... ]
   const jpgPathList = execSync(cmd)
     .toString()
     .trim()
